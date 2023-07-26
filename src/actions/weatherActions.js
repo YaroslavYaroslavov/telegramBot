@@ -3,7 +3,7 @@
 const { Markup } = require("telegraf");
 const apiHelpers = require("../helpers/apiHelper");
 const dbHelpers = require("../helpers/dbHelper");
-
+const { updateReminders } = require("../helpers/cronHelper");
 const getWeather = async (ctx) => {
   const cityName = ctx.message.text.split(" ")[1];
   if (!cityName) {
@@ -29,6 +29,41 @@ const getWeather = async (ctx) => {
   } else {
     ctx.reply(`Не удалось получить информацию о погоде для города ${cityName}`);
   }
+};
+
+const changeNotifyTime = (ctx) => {
+  const userId = ctx.from.id;
+  const input = ctx.message.text;
+  const regex = /^\/weathernotify\s+(\d{2}):(\d{2})$/;
+  const match = input.match(regex);
+
+  if (!match) {
+    ctx.reply(
+      "Некорректный формат команды. Используйте /weathernotify {ЧЧ:ММ}."
+    );
+    return;
+  }
+
+  const hours = parseInt(match[1], 10);
+  const minutes = parseInt(match[2], 10);
+
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) {
+    ctx.reply(
+      "Некорректное значение времени. Проверьте формат и диапазон значений."
+    );
+    return;
+  }
+  const time = `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}`;
+  dbHelpers.addTime(userId, time, (err) => {
+    if (err) {
+      console.error("Ошибка при обновлении времени уведомления:", err.message);
+      ctx.reply("Произошла ошибка при установке времени уведомления.");
+    } else {
+      ctx.reply(`Время уведомления успешно установлено: ${time}`);
+    }
+  });
 };
 
 const acceptSubscribe = (ctx) => {
@@ -72,6 +107,7 @@ const unsubscribe = (ctx) => {
       ctx.reply("Произошла непредвиденная ошибка.");
       console.error(err.message);
     } else {
+      updateReminders(ctx, true);
       console.log(`Row(s) deleted`);
       ctx.reply("Подписка отменена.");
     }
@@ -79,6 +115,7 @@ const unsubscribe = (ctx) => {
 };
 
 module.exports = {
+  changeNotifyTime,
   getWeather,
   acceptSubscribe,
   unsubscribe,

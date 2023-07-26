@@ -16,5 +16,8 @@
     "sqlite3": "^5.1.6",
     "telegraf": "^4.12.2",
     "telegraf-ratelimit": "^2.0.0"
+  },
+  "devDependencies": {
+    "prettier": "3.0.0"
   }
 }
