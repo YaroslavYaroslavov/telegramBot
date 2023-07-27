@@ -121,7 +121,6 @@ const checkTaskExists = (taskId, callback) => {
   });
 };
 const getUserById = (user_id, callback) => {
-  console.log(user_id);
   const query = "SELECT * FROM users WHERE user_id = ?";
   db.get(query, [user_id], (err, row) => {
     if (err) {

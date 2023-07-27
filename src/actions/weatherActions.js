@@ -17,8 +17,8 @@ const getWeather = async (ctx) => {
   if (weather) {
     ctx.replyWithMarkdown(`
       Погода в городе ${cityName}: ${weather.weather[0].description}
-      Температура: ${weather.main.temp - 273}
-      Ощущается как ${weather.main.feels_like - 273}
+      Температура: ${weather.main.temp}
+      Ощущается как ${weather.main.feels_like}
     `);
     ctx.reply(
       `Подписаться на ежедневный прогноз погоды города ${cityName}?`,

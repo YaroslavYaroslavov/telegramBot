@@ -52,8 +52,24 @@ bot.help((ctx) =>
   )
 );
 
-bot.command("cat", getCatImage);
-bot.command("dog", getDogImage);
+bot.command("cat", (ctx) => {
+  try {
+    getCatImage(ctx);
+  } catch (error) {
+    ctx.reply(
+      "Произошла непредвиненная ошибка. Пожалуйста попробуйте еще раз."
+    );
+  }
+});
+bot.command("dog", (ctx) => {
+  try {
+    getDogImage(ctx);
+  } catch (error) {
+    ctx.reply(
+      "Произошла непредвиненная ошибка. Пожалуйста попробуйте еще раз."
+    );
+  }
+});
 
 bot.command("weathernotify", async (ctx) => {
   weatherActions.changeNotifyTime(ctx);

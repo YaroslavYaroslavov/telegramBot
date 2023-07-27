@@ -4,6 +4,14 @@ const { getWeather } = require("./apiHelper");
 
 let sheduledTasks = [];
 let scheduledReminders = [];
+const cache = {};
+
+const isCacheValid = (data) => {
+  const currentTime = Date.now();
+  const cacheTime = data.timestamp;
+  const elapsedMinutes = (currentTime - cacheTime) / (1000 * 60);
+  return elapsedMinutes < 10;
+};
 
 const scheduleNotifications = (bot) => {
   dbHelpers.getTasksWithReminderTime((err, tasks) => {
@@ -95,14 +103,24 @@ const updateReminders = (ctx, isCallback) => {
     const cronExpression = `${minute} ${hour} * * *`;
 
     const task = cron.schedule(cronExpression, async () => {
-      const weather = await getWeather(cityName);
-      ctx.reply(
-        `Погода в городе ${cityName}: ${
-          weather.weather[0].description
-        } \n температура: ${weather.main.temp - 273} \n ощущается как ${
-          weather.main.feels_like - 273
-        }`
-      );
+      if (cache[cityName] && isCacheValid(cache[cityName])) {
+        const weather = cache[cityName];
+        ctx.replyWithMarkdown(`
+      Погода в городе ${cityName}: ${weather.weather[0].description}
+      Температура: ${weather.main.temp}
+      Ощущается как ${weather.main.feels_like}`);
+      } else {
+        const weather = await getWeather(cityName);
+
+        cache[cityName] = {
+          weather,
+          timestamp: Date.now(),
+        };
+        ctx.replyWithMarkdown(`
+      Погода в городе ${cityName}: ${weather.weather[0].description}
+      Температура: ${weather.main.temp}
+      Ощущается как ${weather.main.feels_like}`);
+      }
     });
 
     scheduledReminders.push({ user_id, task });
