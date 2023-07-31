@@ -1,2 +1,4 @@
 *.env
-*.db
+# *.db
+.vercel
+/node_modules/
