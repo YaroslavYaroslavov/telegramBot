@@ -1,7 +1,7 @@
-const apiHelpers = require("../helpers/apiHelper");
+const { getDog } = require("../helpers/apiHelper/getDog");
 
 const getDogImage = async (ctx) => {
-  const dogImageUrl = await apiHelpers.getDog();
+  const dogImageUrl = await getDog();
   if (dogImageUrl) {
     ctx.replyWithPhoto({ url: `https://random.dog/${dogImageUrl}` });
   } else {

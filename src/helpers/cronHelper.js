@@ -1,6 +1,6 @@
 const dbHelpers = require("./dbHelper");
 const cron = require("node-cron");
-const { getWeather } = require("./apiHelper");
+const { getWeather } = require("./apiHelper/getWeather");
 
 let sheduledTasks = [];
 let scheduledReminders = [];

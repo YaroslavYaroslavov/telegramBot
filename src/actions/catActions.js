@@ -1,7 +1,7 @@
-const apiHelpers = require("../helpers/apiHelper");
+const { getCat } = require("../helpers/apiHelper/getCat");
 
 const getCatImage = async (ctx) => {
-  const catImageUrl = await apiHelpers.getCat();
+  const catImageUrl = await getCat();
   if (catImageUrl) {
     ctx.replyWithPhoto({ url: catImageUrl });
   } else {

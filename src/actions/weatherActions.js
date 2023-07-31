@@ -1,7 +1,5 @@
-// actions/weatherActions.js
-
 const { Markup } = require("telegraf");
-const apiHelpers = require("../helpers/apiHelper");
+const getWeatherHelper = require("../helpers/apiHelper/getWeather");
 const dbHelpers = require("../helpers/dbHelper");
 const { updateReminders } = require("../helpers/cronHelper");
 const getWeather = async (ctx) => {
@@ -13,7 +11,7 @@ const getWeather = async (ctx) => {
     return;
   }
 
-  const weather = await apiHelpers.getWeather(cityName);
+  const weather = await getWeatherHelper.getWeather(cityName);
   if (weather) {
     ctx.replyWithMarkdown(`
       Погода в городе ${cityName}: ${weather.weather[0].description}

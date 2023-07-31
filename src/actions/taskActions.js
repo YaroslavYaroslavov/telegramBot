@@ -70,7 +70,7 @@ const validateTask = (ctx) => {
     ctx.reply("Пожалуйста, укажите описание задачи после команды.");
     return;
   }
-  if (dateTime <= Date.now()) {
+  if (dateTime <= Date.now() && dateTime) {
     ctx.reply("Послание в прошлое?!");
     return;
   }

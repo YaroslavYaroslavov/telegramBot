@@ -1,4 +1,4 @@
-const apiHelpers = require("../helpers/apiHelper");
+const { getPlaces } = require("../helpers/apiHelper/getPlaces");
 
 const getPlacesInfo = async (ctx) => {
   const cityName = ctx.message.text.split(" ")[1];
@@ -8,7 +8,7 @@ const getPlacesInfo = async (ctx) => {
     );
     return;
   }
-  const places = await apiHelpers.getPlaces(cityName);
+  const places = await getPlaces(cityName);
   const alredyExist = [];
   if (places && places.length > 0) {
     let answer = `Вот, что я нашел по вашему запросу:\n`;
