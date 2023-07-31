@@ -14,7 +14,7 @@ const {
   initializeReminders,
 } = require("./helpers/cronHelper");
 
-require("dotenv").config();
+require("dotenv").config({ path: "../.env" });
 
 dbHelpers.initializeDatabase();
 
