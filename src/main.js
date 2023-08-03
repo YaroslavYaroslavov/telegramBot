@@ -21,7 +21,7 @@ dbHelpers.initializeDatabase();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 actionsInit(bot);
-
+console.log(new Date(Date.now()));
 botStartConfig(bot);
 
 botCommandInit(bot);

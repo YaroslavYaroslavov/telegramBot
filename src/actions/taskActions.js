@@ -66,6 +66,7 @@ const validateTask = (ctx) => {
   const dateTime = match[2] ? new Date(match[2]) : null;
   const userId = ctx.from.id;
 
+  console.log(dateTime);
   if (!taskName) {
     ctx.reply("Пожалуйста, укажите описание задачи после команды.");
     return;
