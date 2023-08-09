@@ -26,9 +26,9 @@ const scheduleNotifications = (bot) => {
 
       if (!sheduledTasks.includes(task_id)) {
         cron.schedule(
-          `${date.getSeconds()} ${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
-            date.getMonth() + 1
-          } *`,
+          `${date.getSeconds()} ${date.getMinutes()} ${
+            (date.getHours() + 3) % 24
+          } ${date.getDate()} ${date.getMonth() + 1} *`,
           () => {
             bot.telegram.sendMessage(user_id, task_description);
             sheduledTasks = sheduledTasks.filter((item) => {
@@ -55,7 +55,7 @@ const initializeReminders = (bot) => {
       const { user_id, cityName, time } = user;
 
       const [hour, minute] = time.split(":");
-      const cronExpression = `${minute} ${hour} * * *`;
+      const cronExpression = `${minute} ${(hour + 3) % 24} * * *`;
 
       const task = cron.schedule(cronExpression, async () => {
         const weather = await getWeather(cityName);
@@ -100,7 +100,7 @@ const updateReminders = (ctx, isCallback) => {
     const { cityName, time } = user;
 
     const [hour, minute] = time.split(":");
-    const cronExpression = `${minute} ${hour} * * *`;
+    const cronExpression = `${minute} ${(hour + 3) % 24} * * *`;
 
     const task = cron.schedule(cronExpression, async () => {
       if (cache[cityName] && isCacheValid(cache[cityName])) {
